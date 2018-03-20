@@ -18,15 +18,32 @@ def is_image_file(filename):
     return any(filename.endswith(extension) for extension in IMG_EXTENSIONS)
 
 
-def make_dataset(dir):
+def make_dataset(dir, use_list=False):
     images = []
-    assert os.path.isdir(dir), '%s is not a valid directory' % dir
 
-    for root, _, fnames in sorted(os.walk(dir)):
-        for fname in fnames:
-            if is_image_file(fname):
-                path = os.path.join(root, fname)
-                images.append(path)
+    if use_list is True:
+        images = make_list_dataset(dir)
+    else:
+        assert os.path.isdir(dir), '%s is not a valid directory' % dir
+
+        for root, _, fnames in sorted(os.walk(dir)):
+            for fname in fnames:
+                if is_image_file(fname):
+                    path = os.path.join(root, fname)
+                    images.append(path)
+
+    return images
+
+def make_list_dataset(dir):
+    images = []
+    path = dir + '.txt'
+    assert os.path.exists(path), '%s list does not exist' % path
+
+    input_file = open(path, 'r')
+
+    for line in input_file:
+        line = line.strip()
+        images.append(line)
 
     return images
 
