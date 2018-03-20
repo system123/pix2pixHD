@@ -43,7 +43,8 @@ def make_list_dataset(dir):
 
     for line in input_file:
         line = line.strip()
-        images.append(line)
+        if is_image_file(line):
+            images.append(line)
 
     return images
 
